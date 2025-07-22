@@ -1,0 +1,1 @@
+The DALI Sys remaster project is intended to replace the original "Node Red" system with a more modern and efficient implementation while retaining the layout of the original system to avoid having to retrain users.
