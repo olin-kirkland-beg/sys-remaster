@@ -1,0 +1,70 @@
+// Typography
+@import url('https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+    --display: 'Arvo', serif;
+    --body: 'Arvo', serif;
+}
+
+:root {
+    // Core Colors
+    --primary-light: #ffd7e1;
+    --primary: #d82f5a;
+    --primary-alt: #b83052;
+    --background: #fcfbfc;
+    --surface: #f4f0ef; // For surfaces, cards, or containers
+    --surface-border: #e5e2e9; // For borders, dividers, or outlines
+    --surface-alt: #c5c1ca; // For alternate surfaces, cards, or containers
+    --text-on-surface: #111111; // For text on light surfaces
+    --overlay: rgba(0, 0, 0, 0.05); // For overlays, modals, or dark backgrounds
+
+    // Utility Colors
+    --highlight: linear-gradient(
+        0deg,
+        #ffe27080,
+        #ffffff00
+    ); // Used for highlights, important information
+
+    --danger-light: #f8d7da; // Used for light danger states, alerts
+    --danger: #f03e3e; // Used for danger states, alerts
+
+    --info-light: #cfe2ff; // Used for light informational states, alerts
+    --info: #0d6efd; // Used for informational states, alerts
+
+    --success-light: #d1e7dd; // Used for light success states, alerts
+    --success: #198754; // Used for success states, alerts
+
+    // Shadows
+    --shadow-sm: rgba(0, 0, 0, 0.1) 0px 1px 3px;
+    --shadow-md: rgba(0, 0, 0, 0.4) 0px 2px 12px;
+    --shadow-lg: rgba(0, 0, 0, 0.4) 0px 10px 15px;
+    --shadow-text: rgba(0, 0, 0, 0.4) 2px 2px 2px;
+}
+
+.flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+
+    &.wrap {
+        flex-wrap: wrap;
+    }
+
+    &.center {
+        justify-content: center;
+        align-items: center;
+    }
+
+    &.spread {
+        justify-content: space-between;
+    }
+
+    &.row {
+        flex-direction: row;
+    }
+
+    &.column {
+        flex-direction: column;
+    }
+}

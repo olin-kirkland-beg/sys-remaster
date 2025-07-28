@@ -1,0 +1,87 @@
+* {
+    font-family: var(--body);
+    font-size: 1.6rem;
+    color: var(--on-surface);
+}
+
+html,
+body {
+    /* Disables pull-to-refresh and overscroll glow effect.
+     Still keeps swipe navigations. */
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+}
+
+// Typography
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 1.6rem;
+    font-weight: normal;
+    color: var(--on-surface);
+}
+
+h3 {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--surface-alt);
+    text-transform: uppercase;
+}
+
+h4 {
+    opacity: 0.6;
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: normal;
+}
+
+code {
+    font-family: monospace;
+    color: var(--on-surface);
+    background-color: var(--overlay);
+    padding: 0.1rem 0.4rem;
+}
+
+pre {
+    border-left: 0.4rem solid orange;
+    text-align: left;
+    padding: 1rem;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    font-family: monospace;
+    min-height: 3.8rem;
+}
+
+// Utility
+.muted {
+    opacity: 0.5;
+}
+
+.instructive {
+    opacity: 0.5;
+    font-style: italic;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.glass {
+    background-color: rgb(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+}
+
+i {
+    font-size: 1.2rem;
+}
+
+:focus {
+    outline: none;
+}
