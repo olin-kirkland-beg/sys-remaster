@@ -1,43 +1,43 @@
+import { deleteUser, getUser, setUser } from '@/redis/redis-helpers';
 import { StatusCodes } from 'http-status-codes';
+import { v4 as uuid } from 'uuid';
 
 export class UsersController {
-    private users: any[] = []; // This will hold user data temporarily
+    public async createUser(req: any, res: any) {
+        const { username, password } = req.body;
+        if (!username || !password)
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Username and password are required' });
 
-    public createUser(req: any, res: any) {
-        const newUser = req.body;
-        this.users.push(newUser);
-        res.status(201).json(newUser);
+        const user = { id: uuid(), username, password, createdAt: new Date(), updatedAt: new Date() };
+
+        await setUser(user.id, user);
+        res.status(StatusCodes.OK).json(user);
     }
 
-    public getUser(req: any, res: any) {
+    public async getUser(req: any, res: any) {
         const userId = req.params.id;
-        const user = this.users.find((u) => u.id === userId);
-        if (user) {
-            res.status(StatusCodes.OK).json(user);
-        } else {
-            res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
-        }
+        if (!userId) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User ID is required' });
+        const user = await getUser(userId);
+        if (!user) return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
+        res.status(StatusCodes.OK).json();
     }
 
     public updateUser(req: any, res: any) {
         const userId = req.params.id;
-        const index = this.users.findIndex((u) => u.id === userId);
-        if (index !== -1) {
-            this.users[index] = { ...this.users[index], ...req.body };
-            res.status(StatusCodes.OK).json(this.users[index]);
-        } else {
-            res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
-        }
+        if (!userId) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User ID is required' });
+        if (!req.body) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User data is required' });
+        const user = getUser(userId);
+        if (!user) return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
+
+        const updatedUser = { ...user, ...req.body };
+        setUser(userId, updatedUser);
+        res.status(StatusCodes.OK).json(updatedUser);
     }
 
     public deleteUser(req: any, res: any) {
         const userId = req.params.id;
-        const index = this.users.findIndex((u) => u.id === userId);
-        if (index !== -1) {
-            this.users.splice(index, 1);
-            res.status(StatusCodes.NO_CONTENT).send();
-        } else {
-            res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
-        }
+        if (!userId) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User ID is required' });
+        deleteUser(userId);
+        res.status(StatusCodes.NO_CONTENT).send();
     }
 }

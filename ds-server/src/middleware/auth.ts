@@ -1,19 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
+import { User } from '@/types';
+import { NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
-// Extend Express Request interface to include 'user'
-declare global {
-    namespace Express {
-        interface Request {
-            user?: any;
-        }
-    }
-}
-
 const secretKey = process.env.JWT_SECRET || 'your_secret_key';
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+export const authenticateToken = (req: any, res: any, next: NextFunction) => {
     const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token)
@@ -21,17 +13,23 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
             message: 'No token provided. Please log in.',
         });
 
-    jwt.verify(token, secretKey, (err, user) => {
+    jwt.verify(token, secretKey, (err: any, decoded: any) => {
         if (err)
             return res.status(StatusCodes.FORBIDDEN).json({
                 message: 'Invalid token. Please log in again.',
             });
-        req.user = user;
+
+        if (!decoded || typeof decoded !== 'object' || !('id' in decoded)) {
+            return res.status(StatusCodes.FORBIDDEN).json({
+                message: 'Invalid token payload.',
+            });
+        }
+        req.user = decoded as User;
         next();
     });
 };
 
-export const protectRoute = (req: Request, res: Response, next: NextFunction) => {
+export const protectRoute = (req: any, res: any, next: NextFunction) => {
     if (!req.user) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
             message: 'Unauthorized access. Please log in.',
