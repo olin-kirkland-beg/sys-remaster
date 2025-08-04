@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
         "target": "ES2018" /* Specify your target ECMAScript version */,
-        "module": "CommonJS" /* Specify module code generation */,
+        "module": "ESNext" /* Specify module code generation */,
         "strict": true /* Enable all strict type-checking options */,
         "esModuleInterop": true /* Enable emit interoperability between CommonJS and ES Modules */,
+        "moduleResolution": "node" /* Use Node.js module resolution strategy */,
         "resolveJsonModule": true /* Enable JSON module resolution */,
         "outDir": "./dist" /* Redirect output structure to the directory */,
         "baseUrl": "." /* Base directory to resolve non-relative module names */,
@@ -12,5 +13,5 @@
             "types/*": ["src/types/*"]
         }
     },
-    "include": ["src/**/*.ts", "src/parsers/definitions.ts", "src/__tests__/users.test.ts" /* Specify your source files */]
+    "include": ["src/**/*.ts", "src/__tests__/*.ts" /* Specify your source files */]
 }

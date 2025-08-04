@@ -8,7 +8,7 @@ beforeAll(async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 });
 
-test('Jest is working', () => {
+test('jest is working', () => {
     expect(1 + 1).toBe(2);
 });
 

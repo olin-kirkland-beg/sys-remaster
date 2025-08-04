@@ -7,7 +7,7 @@ This project is a TypeScript REST API server that provides user authentication a
 1. Clone the repository:
    ```
    git clone <repository-url>
-   cd ds-server
+   cd server
    ```
 
 2. Install dependencies:
