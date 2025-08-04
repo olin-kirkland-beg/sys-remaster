@@ -1,9 +1,8 @@
-import loginRoutes from './routes/login';
-import userRoutes from './routes/users';
-import { authenticateToken } from './middleware/auth';
 import bodyParser from 'body-parser';
 import express from 'express';
 import RedisBroker from './redis/redis-broker';
+import loginRoutes from './routes/login';
+import userRoutes from './routes/users';
 
 (async () => {
     const redisBroker = RedisBroker.getInstance();

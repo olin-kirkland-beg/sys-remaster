@@ -1,17 +1,16 @@
 {
     "compilerOptions": {
         "target": "ES2018" /* Specify your target ECMAScript version */,
-        "module": "ESNext" /* Specify module code generation */,
+        "module": "CommonJS" /* Specify module code generation */,
         "strict": true /* Enable all strict type-checking options */,
         "esModuleInterop": true /* Enable emit interoperability between CommonJS and ES Modules */,
-        "moduleResolution": "node" /* Use Node.js module resolution strategy */,
         "resolveJsonModule": true /* Enable JSON module resolution */,
         "outDir": "./dist" /* Redirect output structure to the directory */,
         "baseUrl": "." /* Base directory to resolve non-relative module names */,
         "paths": {
             "@/*": ["src/*"],
-            "types/*": ["src/types/*"]
+            "@shared/*": ["../shared/*"]
         }
     },
-    "include": ["src/**/*.ts", "src/__tests__/*.ts" /* Specify your source files */]
+    "include": ["src/**/*.ts" /* Specify your source files */]
 }
