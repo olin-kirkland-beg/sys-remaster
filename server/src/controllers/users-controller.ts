@@ -54,4 +54,16 @@ export class UsersController {
         deleteUser(userId);
         res.status(StatusCodes.NO_CONTENT).send();
     }
+
+    public async getAllUsers(req: any, res: any) {
+        const users = await getAllUsers();
+        res.status(StatusCodes.OK).json(
+            users.map((user: any) => ({
+                id: user.id,
+                username: user.username,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            }))
+        );
+    }
 }
