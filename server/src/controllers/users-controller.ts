@@ -33,7 +33,12 @@ export class UsersController {
         if (!userId) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User ID is required' });
         const user = await getUser(userId);
         if (!user) return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
-        res.status(StatusCodes.OK).json();
+        res.status(StatusCodes.OK).json({
+            id: user.id,
+            username: user.username,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+        });
     }
 
     public updateUser(req: any, res: any) {

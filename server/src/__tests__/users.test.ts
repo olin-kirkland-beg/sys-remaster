@@ -20,6 +20,7 @@ test('jest is working', () => {
     expect(1 + 1).toBe(2);
 });
 
+// Create a user
 describe('POST /users', () => {
     beforeAll(async () => {
         // Clear all users before running tests
@@ -70,6 +71,73 @@ describe('POST /users', () => {
         test('should respond with 400 for short password', async () => {
             const response = await request(app).post('/api/users/').send({ username: 'testuser2', password: 'a' });
             expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
+        });
+    });
+});
+
+// Get all users
+describe('GET /users', () => {
+    beforeAll(async () => {
+        await deleteAllUsers();
+    });
+
+    describe('when there are no users', () => {
+        test('should respond with an empty array', async () => {
+            const response = await request(app).get('/api/users/');
+            expect(response.statusCode).toBe(StatusCodes.OK);
+            expect(response.body).toEqual([]);
+        });
+    });
+
+    describe('when there are users', () => {
+        beforeAll(async () => {
+            await request(app).post('/api/users/').send(TEST_USER);
+        });
+
+        test('should respond with an array of users', async () => {
+            const response = await request(app).get('/api/users/');
+            expect(response.statusCode).toBe(StatusCodes.OK);
+            expect(response.body.length).toBeGreaterThan(0);
+            expect(response.body[0]).toHaveProperty('id');
+            expect(response.body[0]).toHaveProperty('username', TEST_USER.username);
+        });
+    });
+
+    describe('when there are multiple users', () => {
+        beforeAll(async () => {
+            await request(app).post('/api/users/').send({ username: 'user2', password: 'password2' });
+        });
+
+        test('should return all users', async () => {
+            const response = await request(app).get('/api/users/');
+            expect(response.statusCode).toBe(StatusCodes.OK);
+            expect(response.body.length).toBe(2);
+        });
+    });
+});
+
+// Get a user by ID
+describe('GET /users/:id', () => {
+    let createdUserId: string | undefined;
+    beforeAll(async () => {
+        await deleteAllUsers();
+        const response = await request(app).post('/api/users/').send(TEST_USER);
+        createdUserId = response.body.id; // Store the created user's ID in closure
+    });
+
+    describe('when user exists', () => {
+        test('should respond with the user object', async () => {
+            const response = await request(app).get(`/api/users/${createdUserId}`);
+            expect(response.statusCode).toBe(StatusCodes.OK);
+            expect(response.body).toHaveProperty('id', createdUserId);
+            expect(response.body).toHaveProperty('username', TEST_USER.username);
+        });
+    });
+
+    describe('when user does not exist', () => {
+        test('should respond with 404', async () => {
+            const response = await request(app).get('/api/users/nonexistent-id');
+            expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
         });
     });
 });
