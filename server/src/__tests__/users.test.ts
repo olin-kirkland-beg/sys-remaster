@@ -162,3 +162,5 @@ describe('DELETE /users/:id', () => {
         });
     });
 });
+
+// TODO: Test the update user functionality
