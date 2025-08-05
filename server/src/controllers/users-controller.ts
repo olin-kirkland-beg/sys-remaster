@@ -53,9 +53,11 @@ export class UsersController {
         res.status(StatusCodes.OK).json(updatedUser);
     }
 
-    public deleteUser(req: any, res: any) {
+    public async deleteUser(req: any, res: any) {
         const userId = req.params.id;
         if (!userId) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User ID is required' });
+        const user = await getUser(userId);
+        if (!user) return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
         deleteUser(userId);
         res.status(StatusCodes.NO_CONTENT).send();
     }

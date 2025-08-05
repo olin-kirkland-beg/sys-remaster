@@ -14,7 +14,10 @@ beforeAll(async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 });
 
-afterEach(async () => {});
+afterEach(async () => {
+    // Clear all users after each test to ensure isolation
+    await deleteAllUsers();
+});
 
 test('jest is working', () => {
     expect(1 + 1).toBe(2);
@@ -22,11 +25,6 @@ test('jest is working', () => {
 
 // Create a user
 describe('POST /users', () => {
-    beforeAll(async () => {
-        // Clear all users before running tests
-        await deleteAllUsers();
-    });
-
     describe('when given a valid username and password', () => {
         test('should respond with a 200 status code and user object', async () => {
             const response = await request(app).post('/api/users/').send(TEST_USER);
@@ -77,10 +75,6 @@ describe('POST /users', () => {
 
 // Get all users
 describe('GET /users', () => {
-    beforeAll(async () => {
-        await deleteAllUsers();
-    });
-
     describe('when there are no users', () => {
         test('should respond with an empty array', async () => {
             const response = await request(app).get('/api/users/');
@@ -105,6 +99,7 @@ describe('GET /users', () => {
 
     describe('when there are multiple users', () => {
         beforeAll(async () => {
+            await request(app).post('/api/users/').send({ username: 'user1', password: 'password1' });
             await request(app).post('/api/users/').send({ username: 'user2', password: 'password2' });
         });
 
@@ -120,7 +115,6 @@ describe('GET /users', () => {
 describe('GET /users/:id', () => {
     let createdUserId: string | undefined;
     beforeAll(async () => {
-        await deleteAllUsers();
         const response = await request(app).post('/api/users/').send(TEST_USER);
         createdUserId = response.body.id; // Store the created user's ID in closure
     });
@@ -137,6 +131,33 @@ describe('GET /users/:id', () => {
     describe('when user does not exist', () => {
         test('should respond with 404', async () => {
             const response = await request(app).get('/api/users/nonexistent-id');
+            expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
+        });
+    });
+});
+
+// Delete a user
+describe('DELETE /users/:id', () => {
+    let createdUserId: string | undefined;
+    beforeAll(async () => {
+        const response = await request(app).post('/api/users/').send(TEST_USER);
+        createdUserId = response.body.id; // Store the created user's ID in closure
+    });
+
+    describe('when user exists', () => {
+        test('should delete the user and respond with 204', async () => {
+            const response = await request(app).delete(`/api/users/${createdUserId}`);
+            expect(response.statusCode).toBe(StatusCodes.NO_CONTENT);
+
+            // Verify user is deleted
+            const getResponse = await request(app).get(`/api/users/${createdUserId}`);
+            expect(getResponse.statusCode).toBe(StatusCodes.NOT_FOUND);
+        });
+    });
+
+    describe('when user does not exist', () => {
+        test('should respond with 404', async () => {
+            const response = await request(app).delete('/api/users/nonexistent-id');
             expect(response.statusCode).toBe(StatusCodes.NOT_FOUND);
         });
     });
