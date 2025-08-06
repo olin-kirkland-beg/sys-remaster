@@ -3,6 +3,13 @@ import { StatusCodes } from 'http-status-codes';
 import { v4 as uuid } from 'uuid';
 
 export class UsersController {
+    private static instance: UsersController;
+    private constructor() {}
+    public static getInstance(): UsersController {
+        if (!UsersController.instance) UsersController.instance = new UsersController();
+        return UsersController.instance;
+    }
+
     public async createUser(req: any, res: any) {
         const { username, password } = req.body;
         if (!username || !password)

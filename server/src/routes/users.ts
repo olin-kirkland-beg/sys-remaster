@@ -2,7 +2,7 @@ import { UsersController } from '@/controllers/users-controller';
 import { Router } from 'express';
 
 const router = Router();
-const usersController = new UsersController();
+const usersController = UsersController.getInstance();
 
 router.post('/', usersController.createUser);
 router.get('/:id', usersController.getUser);
