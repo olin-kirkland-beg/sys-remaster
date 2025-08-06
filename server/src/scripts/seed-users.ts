@@ -2,7 +2,7 @@
 // Usage: Run this script to populate Redis with test users
 
 import RedisBroker from '@/redis/redis-broker';
-import { setUser } from '@/redis/redis-helpers';
+import { deleteAllUsers, setUser } from '@/redis/redis-helpers';
 import { v4 as uuid } from 'uuid'; // Importing uuid for unique user IDs
 
 const USERS = [
@@ -21,6 +21,7 @@ const USERS = [
 (async () => {
     const redisBroker = RedisBroker.getInstance();
     await redisBroker.start();
+    await deleteAllUsers(); // Clear existing users before seeding
     await seedUsers();
 })().catch((error) => {
     console.error(error);
